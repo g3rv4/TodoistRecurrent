@@ -56,7 +56,19 @@ namespace TodoistRecurrent
                         String = t.Due
                     }
                 }
-            }).ToArray();
+            } as BaseCommand).Concat(tasksToRun.Select(t => new TodoistCommand<TodoistReminder>
+            {
+                Type = "reminder_add",
+                UUID = t.GetId(utcNow) + "r",
+                TempId = t.GetId(utcNow) + "r",
+                Args = new TodoistReminder()
+                {
+                    ItemId = t.GetId(utcNow),
+                    Type = "relative",
+                    Service = "push",
+                    MinuteOffset = 0
+                }
+            })).ToArray();
 
             if (commands.Length == 0)
             {
@@ -66,7 +78,7 @@ namespace TodoistRecurrent
             var dict = new Dictionary<string, string>()
             {
                 ["token"] = Environment.GetEnvironmentVariable("TODOIST_TOKEN"),
-                ["commands"] = Jil.JSON.Serialize(commands, Jil.Options.ExcludeNullsCamelCase)
+                ["commands"] = Jil.JSON.SerializeDynamic(commands, Jil.Options.ExcludeNullsIncludeInheritedCamelCase)
             };
 
             var content = new FormUrlEncodedContent(dict);
@@ -117,7 +129,9 @@ namespace TodoistRecurrent
         }
     }
 
-    public class TodoistCommand<T>
+    public class BaseCommand {}
+
+    public class TodoistCommand<T> : BaseCommand
     {
         public string Type { get; set; }
         public string UUID { get; set; }
@@ -134,6 +148,16 @@ namespace TodoistRecurrent
         public TodoistDue Due { get; set; }
         [DataMember(Name = "responsible_uid")]
         public long? ResponsibleUid { get; set; }
+    }
+
+    public class TodoistReminder
+    {
+        [DataMember(Name = "item_id")]
+        public string ItemId { get; set; }
+        public string Type { get; set; }
+        public string Service { get; set; }
+        [DataMember(Name = "minute_offset")]
+        public int MinuteOffset { get; set; }
     }
 
     public class TodoistDue
