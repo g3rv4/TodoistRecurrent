@@ -13,6 +13,8 @@ namespace TodoistRecurrent
     class Program
     {
         private static ScheduledTask[] _dailyTasks = new[] {
+            new ScheduledTask("Check Todoist before wrapping up", "today at 5pm", new TimeSpan(19, 30, 0), ImmutableArray.Create(DayOfWeek.Monday,
+                DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday)),
             new ScheduledTask("Comida para Amelia (hay? vaporera)", "today at 11pm", new TimeSpan(23, 0, 0)),
             new ScheduledTask("Lavar / secar platos", "today at 11pm", new TimeSpan(23, 0, 0)),
             new ScheduledTask("Rellenar botellas de agua", "today at 11pm", new TimeSpan(23, 0, 0)),
@@ -70,7 +72,7 @@ namespace TodoistRecurrent
                     ItemId = t.GetId(utcNow),
                     Type = "relative",
                     Service = "push",
-                    MinuteOffset = 0
+                    MinuteOffset = 30
                 }
             })).ToArray();
 
