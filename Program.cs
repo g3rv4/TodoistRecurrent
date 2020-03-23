@@ -13,15 +13,15 @@ namespace TodoistRecurrent
     class Program
     {
         private static ScheduledTask[] _dailyTasks = new[] {
-            new ScheduledTask("Comida para Amelia (hay? vaporera)", "today at 9pm", new TimeSpan(23, 0, 0)),
-            new ScheduledTask("Lavar / secar platos", "today at 9pm", new TimeSpan(23, 0, 0)),
-            new ScheduledTask("Rellenar botellas de agua", "today at 9pm", new TimeSpan(23, 0, 0)),
-            new ScheduledTask("Guardar ropa de comer", "today at 9pm", new TimeSpan(23, 0, 0)),
-            new ScheduledTask("Ropa para lavar / colgar", "today at 9pm", new TimeSpan(23, 0, 0)),
-            new ScheduledTask("Lavar silla/piso", "today at 9pm", new TimeSpan(23, 0, 0)),
-            new ScheduledTask("Guardar verduras vaporera", "today at 9pm", new TimeSpan(23, 0, 0)),
-            new ScheduledTask("Galletitas de banana", "today at 9pm", new TimeSpan(23, 0, 0)),
-            new ScheduledTask("Pasar rumba", "today at 10pm", new TimeSpan(23, 0, 0), ImmutableArray.Create(DayOfWeek.Tuesday, DayOfWeek.Sunday)),
+            new ScheduledTask("Comida para Amelia (hay? vaporera)", "today at 11pm", new TimeSpan(23, 0, 0)),
+            new ScheduledTask("Lavar / secar platos", "today at 11pm", new TimeSpan(23, 0, 0)),
+            new ScheduledTask("Rellenar botellas de agua", "today at 11pm", new TimeSpan(23, 0, 0)),
+            new ScheduledTask("Guardar ropa de comer", "today at 11pm", new TimeSpan(23, 0, 0)),
+            new ScheduledTask("Ropa para lavar / colgar", "today at 11pm", new TimeSpan(23, 0, 0)),
+            new ScheduledTask("Lavar silla/piso", "today at 11pm", new TimeSpan(23, 0, 0)),
+            new ScheduledTask("Guardar verduras vaporera", "today at 11pm", new TimeSpan(23, 0, 0)),
+            new ScheduledTask("Galletitas de banana", "today at 11pm", new TimeSpan(23, 0, 0)),
+            new ScheduledTask("Pasar rumba", "today at 11pm", new TimeSpan(23, 0, 0), ImmutableArray.Create(DayOfWeek.Tuesday, DayOfWeek.Sunday)),
             new ScheduledTask("Sacar jabón de la bañera", "today at 7pm", new TimeSpan(21, 0, 0), ImmutableArray.Create(DayOfWeek.Thursday)),
             new ScheduledTask("Dar vuelta la ensalada", "today at 8pm", new TimeSpan(22, 0, 0), ImmutableArray.Create(DayOfWeek.Thursday)),
         };
@@ -38,7 +38,11 @@ namespace TodoistRecurrent
 
                 // it's not an issue if we create it multiple times. Multiple requests will be ignored
                 var diff = utcNow.TimeOfDay.Subtract(t.ScheduleAtUTC).TotalHours;
-                return diff >= 0 && diff <= 1;
+                if (diff < 0)
+                {
+                    diff += 24;
+                }
+                return diff <= 1;
             });
 
             var commands = tasksToRun.Select(t => new TodoistCommand<TodoistTask>()
@@ -129,7 +133,7 @@ namespace TodoistRecurrent
         }
     }
 
-    public class BaseCommand {}
+    public class BaseCommand { }
 
     public class TodoistCommand<T> : BaseCommand
     {
