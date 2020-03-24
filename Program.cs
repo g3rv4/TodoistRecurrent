@@ -13,8 +13,8 @@ namespace TodoistRecurrent
     class Program
     {
         private static ScheduledTask[] _dailyTasks = new[] {
-            new ScheduledTask("Check Todoist before wrapping up", "today at 5pm", new TimeSpan(19, 30, 0), ImmutableArray.Create(DayOfWeek.Monday,
-                DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday)),
+            new ScheduledTask("Check Todoist before wrapping up", "today at 5pm", new TimeSpan(19, 0, 0), ImmutableArray.Create(DayOfWeek.Monday,
+                DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday), 2217036134),
             new ScheduledTask("Comida para Amelia (hay? vaporera)", "today at 11pm", new TimeSpan(23, 0, 0)),
             new ScheduledTask("Lavar / secar platos", "today at 11pm", new TimeSpan(23, 0, 0)),
             new ScheduledTask("Rellenar botellas de agua", "today at 11pm", new TimeSpan(23, 0, 0)),
@@ -55,7 +55,7 @@ namespace TodoistRecurrent
                 Args = new TodoistTask()
                 {
                     Content = t.Content,
-                    ProjectId = 2210411112,
+                    ProjectId = t.ProjectId,
                     ResponsibleUid = 22636116,
                     Due = new TodoistDue()
                     {
@@ -103,18 +103,20 @@ namespace TodoistRecurrent
         public string Due { get; private set; }
         public ImmutableArray<DayOfWeek> Days { get; private set; }
         public TimeSpan ScheduleAtUTC { get; private set; }
+        public long ProjectId { get; set; }
 
         private static readonly ImmutableArray<DayOfWeek> _everyDay = ImmutableArray.Create(DayOfWeek.Sunday, DayOfWeek.Monday,
             DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday);
 
         public ScheduledTask(string content, string due, TimeSpan scheduleAtUTC) : this(content, due, scheduleAtUTC, _everyDay) { }
 
-        public ScheduledTask(string content, string due, TimeSpan scheduleAtUTC, ImmutableArray<DayOfWeek> days)
+        public ScheduledTask(string content, string due, TimeSpan scheduleAtUTC, ImmutableArray<DayOfWeek> days, long? projectId = null)
         {
             Content = content;
             Due = due;
             ScheduleAtUTC = scheduleAtUTC;
             Days = days;
+            ProjectId = projectId ?? 2210411112;
         }
 
         public string GetId(DateTime utcNow)
