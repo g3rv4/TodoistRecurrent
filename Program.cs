@@ -24,8 +24,8 @@ namespace TodoistRecurrent
             new ScheduledTask("Guardar verduras vaporera", "today at 11pm", new TimeSpan(23, 0, 0)),
             new ScheduledTask("Galletitas de banana", "today at 11pm", new TimeSpan(23, 0, 0)),
             new ScheduledTask("Pasar rumba", "today at 11pm", new TimeSpan(23, 0, 0), ImmutableArray.Create(DayOfWeek.Tuesday, DayOfWeek.Sunday)),
-            new ScheduledTask("Sacar jabón de la bañera", "today at 7pm", new TimeSpan(21, 0, 0), ImmutableArray.Create(DayOfWeek.Thursday)),
-            new ScheduledTask("Dar vuelta la ensalada", "today at 8pm", new TimeSpan(22, 0, 0), ImmutableArray.Create(DayOfWeek.Thursday)),
+            // new ScheduledTask("Sacar jabón de la bañera", "today at 7pm", new TimeSpan(21, 0, 0), ImmutableArray.Create(DayOfWeek.Thursday)),
+            // new ScheduledTask("Dar vuelta la ensalada", "today at 8pm", new TimeSpan(22, 0, 0), ImmutableArray.Create(DayOfWeek.Thursday)),
         };
 
         static async Task Main(string[] args)
