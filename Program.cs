@@ -40,7 +40,7 @@ namespace TodoistRecurrent
                     diff += 24;
                 }
                 return diff <= 1;
-            });
+            }).ToArray();
 
             var commands = tasksToRun.Select(t => new TodoistCommand<TodoistTask>()
             {
