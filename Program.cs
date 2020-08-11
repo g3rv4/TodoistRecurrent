@@ -15,12 +15,9 @@ namespace TodoistRecurrent
         private static ScheduledTask[] _dailyTasks = new[] {
             new ScheduledTask("Check Todoist before wrapping up", "today at 5pm", new TimeSpan(19, 0, 0), ImmutableArray.Create(DayOfWeek.Monday,
                 DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday), 2217036134),
-            new ScheduledTask("Rellenar botellas de agua", "today at 11pm", new TimeSpan(23, 0, 0)),
-            new ScheduledTask("Ropa para lavar / colgar", "today at 11pm", new TimeSpan(23, 0, 0)),
-            new ScheduledTask("Pasar rumba", "today at 11pm", new TimeSpan(23, 0, 0), ImmutableArray.Create(DayOfWeek.Tuesday, DayOfWeek.Sunday)),
             new ScheduledTask("Sacar jabón de la bañera", "today at 7pm", new TimeSpan(21, 0, 0), ImmutableArray.Create(DayOfWeek.Thursday)),
             new ScheduledTask("Dar vuelta la ensalada", "today at 8pm", new TimeSpan(22, 0, 0), ImmutableArray.Create(DayOfWeek.Thursday)),
-            new ScheduledTask("Agua aires acondicionados ", "today at 8pm", new TimeSpan(22, 0, 0), ImmutableArray.Create(DayOfWeek.Thursday)),
+            // new ScheduledTask("Agua aires acondicionados ", "today at 8pm", new TimeSpan(22, 0, 0), ImmutableArray.Create(DayOfWeek.Thursday)),
         };
 
         static async Task Main(string[] args)
