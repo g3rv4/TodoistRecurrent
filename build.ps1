@@ -12,6 +12,7 @@ $versionElement = $xmlDoc['Project']['PropertyGroup']['Version']
 $version = [version]$versionElement.InnerText
 $newVersion = "$($version.Major).$($version.Minor).$($BuildNumber)"
 
+$versionWithoutHash = $newVersion
 if ($CommitSHA) {
   $newVersion = "$($newVersion)+$($CommitSHA.SubString(0, 7))"
 }
@@ -26,18 +27,20 @@ if (Test-Path $buildPath -PathType Container) {
 $uid = sh -c 'id -u'
 $gid = sh -c 'id -g'
 
-docker run --rm -v "$($basePath):/var/src" mcr.microsoft.com/dotnet/core/sdk:3.1.302-alpine3.12 ash -c "dotnet publish -c Release /var/src/TodoistRecurrent.csproj -o /var/src/bin/build && chown -R $($uid):$($gid) /var/src"
+docker run --rm -v "$($basePath):/var/src" mcr.microsoft.com/dotnet/core/sdk:3.1.404-alpine3.12 ash -c "dotnet publish -c Release /var/src/TodoistRecurrent.csproj -o /var/src/bin/build && chown -R $($uid):$($gid) /var/src"
 
 $nuspecPath = Join-Path $buildPath todoistrecurrent.nuspec
 $nupkgPath = Join-Path $buildPath "todoistrecurrent.$($newVersion).nupkg"
 cp todoistrecurrent.nuspec $nuspecPath
 
 [xml]$xmlDoc = Get-Content $nuspecPath
-$xmlDoc['package']['metadata']['version'].InnerText = $newVersion
+$xmlDoc['package']['metadata']['version'].InnerText = $versionWithoutHash
 $xmlDoc.Save($nuspecPath)
 
 Compress-Archive -Path "$($buildPath)/*" -DestinationPath $nupkgPath
 
-Write-Host "Compressed!"
-Write-Host "::set-env name=VERSION::$newVersion"
-Write-Host "::set-env name=PKG_PATH::$nupkgPath"
+if ($env:GITHUB_ENV) {
+  Write-Output "VERSION_WITHOUT_HASH=$versionWithoutHash" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+  Write-Output "VERSION=$newVersion" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+  Write-Output "PKG_PATH=$nupkgPath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+}
